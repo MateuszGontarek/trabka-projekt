@@ -1,65 +1,98 @@
-import Image from "next/image";
+"use client";
+
+import { EventEditor } from "@/components/event-editor/event-editor";
+import { EventList } from "@/components/event-list/event-list";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Calendar, List } from "lucide-react";
+import { getEvents, addEvent, type EventWithMetadata } from "@/lib/events-storage";
 
 export default function Home() {
+  const [view, setView] = useState<"editor" | "list">("editor");
+  const [events, setEvents] = useState<EventWithMetadata[]>([]);
+  
+  // Załaduj wydarzenia przy starcie
+  useEffect(() => {
+    const loadedEvents = getEvents();
+    setEvents(loadedEvents);
+  }, []);
+  
+  // Funkcja do dodawania nowego wydarzenia
+  const handleEventCreated = (eventData: any) => {
+    const newEvent = addEvent(eventData);
+    setEvents((prev) => [...prev, newEvent]);
+    // Przełącz na widok listy po utworzeniu wydarzenia
+    setView("list");
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+      <div className="container mx-auto py-8 px-4">
+        {/* Header z nawigacją */}
+        <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Edytor Wydarzeń
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Twórz i zarządzaj wydarzeniami
+            </p>
+          </div>
+          
+          <div className="flex gap-2">
+            <Button
+              variant={view === "editor" ? "default" : "outline"}
+              onClick={() => setView("editor")}
+              className="group"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              <Calendar className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+              Edytor
+            </Button>
+            <Button
+              variant={view === "list" ? "default" : "outline"}
+              onClick={() => setView("list")}
+              className="group"
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <List className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+              Lista
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Główna zawartość */}
+        {view === "editor" ? (
+          <EventEditor onEventCreated={handleEventCreated} />
+        ) : (
+          <EventList events={events} onEventsChange={setEvents} />
+        )}
+
+        {/* Dialog z informacjami */}
+        <div className="mt-8 flex justify-center">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" className="group">
+                Informacje o projekcie
+                <span className="ml-2 group-hover:animate-pulse">ℹ️</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[500px]">
+              <DialogHeader>
+                <DialogTitle>Funkcjonalności projektu</DialogTitle>
+                <DialogDescription>
+                  Projekt wykorzystuje wszystkie wymagane technologie i wzorce
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-2 text-sm">
+                <p><strong>TailwindCSS:</strong> Media queries, pseudoklasy, container, group, animacje, container queries</p>
+                <p><strong>TypeScript:</strong> Unie, interesekcje, generyki, przeciążenia, predykaty typów</p>
+                <p><strong>React Hook Form & Zod:</strong> Multi-step formularz, walidacja, regex, refine, reCAPTCHA</p>
+                <p><strong>Shadcn:</strong> Dialog, Card, Table, Tooltip, Dropdown Menu, wykresy, Compound Components</p>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
