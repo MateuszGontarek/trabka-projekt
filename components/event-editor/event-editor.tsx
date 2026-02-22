@@ -87,15 +87,21 @@ export function EventEditor({ onEventCreated }: EventEditorProps) {
     }
   };
 
-  const onSubmit = async (data: EventFormData) => {
+  const onSubmit = async (data: EventFormInput) => {
     console.log("🎉 ========== onSubmit CALLED ==========");
     console.log("✅ onSubmit function called!");
     console.log("✅ Form submitted successfully!");
     console.log("📋 Form data:", JSON.stringify(data, null, 2));
     
     try {
+      // Po walidacji zodResolver zwraca sparsowane dane (z domyślnymi wartościami)
+      const resolved: EventFormData = {
+        ...data,
+        online: data.online ?? false,
+        priority: (data.priority ?? "medium") as EventFormData["priority"],
+      };
       // Wywołaj callback z danymi wydarzenia (bez recaptcha)
-      const { recaptcha, ...eventData } = data;
+      const { recaptcha, ...eventData } = resolved;
       if (onEventCreated) {
         onEventCreated(eventData);
       }
