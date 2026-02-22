@@ -120,6 +120,8 @@ export const eventSchema = z.object({
 });
 
 export type EventFormData = z.infer<typeof eventSchema>;
+/** Typ wejściowy formularza (przed zastosowaniem domyślnych wartości) – do useForm + zodResolver */
+export type EventFormInput = z.input<typeof eventSchema>;
 
 // Użycie predykatu typu
 export function isEventStatus(status: string): status is EventStatus {

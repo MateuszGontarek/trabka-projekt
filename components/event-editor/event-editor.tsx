@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { eventSchema, type EventFormData } from "@/lib/types";
+import { eventSchema, type EventFormData, type EventFormInput } from "@/lib/types";
 import { Step1BasicInfo } from "./steps/step1-basic-info";
 import { Step2DateTime } from "./steps/step2-date-time";
 import { Step3Location } from "./steps/step3-location";
@@ -23,7 +23,7 @@ export function EventEditor({ onEventCreated }: EventEditorProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  const form = useForm<EventFormData>({
+  const form = useForm<EventFormInput>({
     resolver: zodResolver(eventSchema),
     mode: "onChange",
     defaultValues: {
@@ -45,7 +45,7 @@ export function EventEditor({ onEventCreated }: EventEditorProps) {
   const { handleSubmit, trigger, formState: { errors, isValid, isDirty } } = form;
 
   const handleNext = async () => {
-    let fieldsToValidate: (keyof EventFormData)[] = [];
+    let fieldsToValidate: (keyof EventFormInput)[] = [];
     
     switch (currentStep) {
       case 1:
@@ -120,7 +120,7 @@ export function EventEditor({ onEventCreated }: EventEditorProps) {
     // Wyświetl szczegółowe informacje o każdym błędzie
     Object.keys(errors).forEach((field) => {
       console.log(`Field "${field}" error:`, errors[field]);
-      console.log(`Field "${field}" value:`, form.getValues(field as keyof EventFormData));
+      console.log(`Field "${field}" value:`, form.getValues(field as keyof EventFormInput));
     });
     
     // Przewiń do pierwszego błędu
