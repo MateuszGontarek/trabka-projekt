@@ -1,7 +1,7 @@
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
-import { EventFormData } from "@/lib/types";
+import { EventFormInput } from "@/lib/types";
 import {
   FormControl,
   FormDescription,
@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 interface Step2DateTimeProps {
-  form: UseFormReturn<EventFormData>;
+  form: UseFormReturn<EventFormInput>;
 }
 
 export function Step2DateTime({ form }: Step2DateTimeProps) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
-import { EventFormData } from "@/lib/types";
+import { EventFormInput } from "@/lib/types";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/form";
 
 interface Step1BasicInfoProps {
-  form: UseFormReturn<EventFormData>;
+  form: UseFormReturn<EventFormInput>;
 }
 
 export function Step1BasicInfo({ form }: Step1BasicInfoProps) {

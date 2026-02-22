@@ -1,7 +1,7 @@
 "use client";
 
 import { UseFormReturn } from "react-hook-form";
-import { EventFormData } from "@/lib/types";
+import { EventFormInput } from "@/lib/types";
 import {
   FormControl,
   FormDescription,
@@ -22,7 +22,7 @@ import {
 import { useEffect } from "react";
 
 interface Step3LocationProps {
-  form: UseFormReturn<EventFormData>;
+  form: UseFormReturn<EventFormInput>;
 }
 
 export function Step3Location({ form }: Step3LocationProps) {
