@@ -1,5 +1,8 @@
 import { EventWithMetadata, EventFormData } from "./types";
 
+// Re-eksport typu dla wygody importowania
+export type { EventWithMetadata };
+
 const STORAGE_KEY = "events";
 
 // Typ dla wydarzenia bez recaptcha
