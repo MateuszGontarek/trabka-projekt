@@ -125,19 +125,7 @@ export function EventList({ events, onEventsChange }: EventListProps) {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Akcje</DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                  onClick={() => setSelectedEvent(event)}
-                                  className="cursor-pointer"
-                                >
-                                  <Eye className="mr-2 h-4 w-4" />
-                                  Zobacz
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="cursor-pointer">
-                                  <Edit className="mr-2 h-4 w-4" />
-                                  Edytuj
-                                </DropdownMenuItem>
+                                <DropdownMenuLabel>Akcja</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem 
                                   className="text-destructive cursor-pointer"
